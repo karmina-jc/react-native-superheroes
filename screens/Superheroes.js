@@ -1,51 +1,27 @@
-import React from 'react';
-import { StyleSheet, Text, View, FlatList, Image } from 'react-native';
+import React, {useEffect} from 'react';
+import { StyleSheet, Text, View, FlatList, Image, ScrollView } from 'react-native';
+import { useDispatch, useSelector} from 'react-redux';
+import { getDataHeroes } from '../Redux/SupersDuck';
 
-export default class Superheroes extends React.Component {
+ const Superheroes = () => {
 
-    constructor(props) {
-      super(props);
-  
-      this.state = {
-        loading: false,
-        superheroes: [],
-        url:'http://157.245.138.232:9091/api/v1/test/superheroes',
-        error:null
-      }
-    }
-  
-    componentDidMount(){
-        this.getData()
-      }
-    
-    getData = () => {
-      this.setState({ loading:true });
-  
-      fetch(this.state.url)
-      .then(res => res.json())
-      .then(res => {
-        this.setState({
-          superheroes: res.data,
-          loading: false
-        })
-        console.log(res.data)
-      })
-    }
-  
-    render(){
-      if(this.state.loading){
-        return (
-          <View style={styles.container}>
-            <Text>Downloading Superheroes...</Text>
-          </View>
-        )
-      }
-      return (
-      <View style={styles.container}>
+   const dispatch = useDispatch()
+
+   const superheroes = useSelector(store => store.Superheroes)
+
+  useEffect(() => {
+      const fetchData = () =>{
+          dispatch(getDataHeroes())
+          }
+          return fetchData()
+      }, [dispatch])
+
+    return (
+      <View>
         <Text>Superhéroes</Text>
         <FlatList
+        data={superheroes}
         keyExtractor={item => item.id.toString()}
-        data={this.state.superheroes}
         renderItem={
           ({item}) => {
             return(
@@ -62,10 +38,10 @@ export default class Superheroes extends React.Component {
         }
         />
       </View>
-      );
-    }
-    
+    );
   }
+
+  export default Superheroes
   
   const styles = StyleSheet.create({
     container: {
