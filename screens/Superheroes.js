@@ -7,9 +7,9 @@ import { getDataHeroes } from '../Redux/SupersDuck';
 
    const dispatch = useDispatch()
 
-   const superheroes = useSelector(store => store.Superheroes)
+   const superheroes = useSelector(store => store.Superheroes.supers.data)
 
-  useEffect(() => {
+    useEffect(() => {
       const fetchData = () =>{
           dispatch(getDataHeroes())
           }
@@ -17,25 +17,31 @@ import { getDataHeroes } from '../Redux/SupersDuck';
       }, [dispatch])
 
     return (
-      <View>
-        <Text>Superhéroes</Text>
+      <View style={styles.container}>
+        <Text style={styles.title}>Superhéroes</Text>
         <FlatList
-        data={superheroes}
-        keyExtractor={item => item.id.toString()}
-        renderItem={
-          ({item}) => {
-            return(
-              <View>
-                <Image 
-                style={styles.avatar}
-                source={{uri: item.avatarURL}}
-                />
-                <Text>{item.nombre}</Text>
-                <Text>{item.nombreReal}</Text>
-              </View>
-            )
-          }  
-        }
+          data={superheroes}
+          keyExtractor={item => item.id.toString()}
+          renderItem={
+            ({item}) => {
+              return(
+                <View style={styles.heroCard}>
+                  <Image 
+                  style={styles.avatar}
+                  source={{uri: item.avatarURL}}
+                  />
+                  <View style={styles.infoCard}>
+                    <Text 
+                    style={styles.heroName}
+                    >
+                      {item.nombre}
+                    </Text>
+                    <Text>{item.nombreReal}</Text>
+                  </View>
+                </View>
+              )
+            }  
+          }
         />
       </View>
     );
@@ -50,10 +56,30 @@ import { getDataHeroes } from '../Redux/SupersDuck';
       alignItems: 'center',
       justifyContent: 'center',
     },
-    avatar: {
-      width: 50,
-      height: 50,
-      borderRadius: 50,
+    title: {
+      width:'100%',
+      fontSize: 25,
+      alignSelf: 'flex-start',
+      padding: 5,
+      backgroundColor: "#e8ecf0"
     },
+    heroCard: {
+      flex: 1, 
+      flexDirection: 'row',
+      paddingVertical: 10,
+      paddingHorizontal: 60,
+      borderWidth: 1,
+
+    },
+    avatar: {
+      width: 70,
+      height: 70,
+      borderRadius: 50,
+      marginRight: 20,
+    },
+    heroName: {
+      fontWeight: 'bold',
+      fontSize: 20,
+    }
   });
   
